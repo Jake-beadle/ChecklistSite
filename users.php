@@ -6,7 +6,7 @@
     if ($_SESSION['perms'] != 'Admin'){ 
         header("Location: /main.php");
     }
-    $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+    $conn = mysqli_connect("", "", "", "");
     $query = "SELECT * FROM logininfo WHERE Deleted != 1"; // Returns all users that haven't been deleted (shown in the table)
     $result = mysqli_query($conn, $query);
 ?>

@@ -45,7 +45,7 @@
             }
         }
     }
-    $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+    $conn = mysqli_connect("", "", "", "");
     // First updates the information about the computer using the text variables, then the checklists which uses the sentence from before in the query
     $infoquery = "UPDATE checklistsinfo SET PCname = '$name', Plant = '$plant', Sublocation = '$sub', Updatedby = '$username' WHERE ComputerID = '$updateID'";
     $checkquery = "UPDATE checklists SET ".$checkstoset." WHERE ChecklistID = $updateID";

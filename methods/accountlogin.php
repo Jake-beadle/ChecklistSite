@@ -2,7 +2,7 @@
 session_start();
 if (!empty($_POST)) {
     if (isset($_POST['user']) && isset($_POST['pass'])) {
-        $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+        $conn = mysqli_connect("", "", "", "");
         // Sets up a query and returns an object from the database which will have the desired user's details
         $stmt = $conn->prepare("SELECT * FROM logininfo WHERE Username = ?");
         $stmt->bind_param('s',$_POST['user']);

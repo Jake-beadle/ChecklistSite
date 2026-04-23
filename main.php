@@ -5,7 +5,7 @@
     if (!isset($_SESSION['user']) && !isset($_SESSION['perms'])){ 
         header("Location: /login.php");
     }
-    $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+    $conn = mysqli_connect("", "", "", "");
     // Queries that are used for filling out the table (as well as the drop-down list using the first query)
     // The two queries below are the same, but two variables are needed so that it can be used more than once (usages explained later)
     $devicequery = "SELECT * FROM checklistsinfo WHERE Deleted != 1";

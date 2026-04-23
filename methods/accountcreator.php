@@ -1,6 +1,6 @@
 <?php
         // Creates a connection to the database to be used later
-        $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+        $conn = mysqli_connect("", "", "", "");
         // Gets the variables from the posted form
         if(isset($_POST["user"]))
         {

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+    $conn = mysqli_connect("", "", "", "");
         if(isset($_POST["pcname"]))
         {
             $pcName = $_POST["pcname"];
