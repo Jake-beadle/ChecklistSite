@@ -1,0 +1,69 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: lightgray;
+    background-color: #253746;
+    text-align: center;
+}
+
+#login, #checklist, #checklistuser {
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 8px 16px; 
+    display: inline-block;
+    background-color: #2f3b44;
+}
+
+h1 {
+    color: white;
+}
+
+a {
+    color: #ec7f22;
+}
+
+#checklisttable, #usertable {
+    justify-self: center;
+    text-align: center;
+    border: 2px solid black;
+    background-color: #2f3b44;
+    padding: 8px 16px; 
+}
+
+#Checklist {
+    font-size: 12px;
+    accent-color: #ec7f22;
+}
+
+#deviceselect {
+    font-size: 20px;
+}
+
+td {
+    padding: 10px;
+}
+
+img {
+    padding: 25px;
+    min-width: 150px;
+}
+
+input, textarea, select, button {
+    background-color: #2b343b;
+    color: white;
+}
+
+input::placeholder, textarea::placeholder, legend {
+    color: lightgray;
+}
+
+.completed {
+    color: #ec7f22;
+}
+
+textarea {
+    height: 1rem;
+}
+
+h4 {
+    font-weight: normal;
+}
