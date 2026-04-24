@@ -128,7 +128,7 @@ $checkresult = mysqli_query($conn, $checkquery);
     <!-- Table that contains checklists and information for each PC.
     Contains all of the data from the database, but only shows the 
     entries that the user has selected using the above methods -->
-    <table id="checklisttable" hidden>
+    <table id="checklisttable">
         <thead>
             <th hidden>ID</th>
             <th>PC/user information</th>
@@ -155,7 +155,7 @@ $checkresult = mysqli_query($conn, $checkquery);
                             "Standard software pack installed"    
                         ];
                         $checkrow = mysqli_fetch_assoc($checkresult);
-                        echo "<tr id='Entry".$inforow['ComputerID']."' hidden>
+                        echo "<tr id='Entry".$inforow['ComputerID']."'>
                         <td id='ComputerID' hidden>".$inforow['ComputerID']."</td>
                         <td id='PCUserInfo'>
                             <p id='PCname'>Name of PC: ".$inforow['PCname']."</p>
@@ -331,11 +331,6 @@ $checkresult = mysqli_query($conn, $checkquery);
     })
 
     $("#deviceselect").on("input",function(){
-        // Unhides the table after it has been used for the first time, which improves appearance 
-        // (otherwise it would only have had the titles of each column with no values under them)
-        if ($(document).find("#checklisttable").attr("hidden")) {
-            $(document).find("#checklisttable").attr("hidden", false)
-        }
         // Sets the input to lowercase to make it ignore capitals, making iit easier to search (name of pc is also set to lowercase later for this reason)
         let search = $(document).find('#deviceselect').val().toLowerCase()
         if (search.length >= 3) {
@@ -354,5 +349,6 @@ $checkresult = mysqli_query($conn, $checkquery);
                     $(row).attr("hidden",true)
                 }
             }
-    }})
+        }
+    })
 </script>
