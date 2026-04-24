@@ -229,6 +229,10 @@ $checkresult = mysqli_query($conn, $checkquery);
         let selectsort = $(document).find(`#datesort option[value=${sortby}]`)
         let selectpage = $(document).find(`#pagechange option[value=${currentpage}]`)
         let selectsize = $(document).find(`#pagesize option[value=${currentsize}]`)
+        // If the parameters can't be set for any reason (e.g. if the URL is changed manually), it gets set back to the default settings
+        if (!($(selectsort).length)||!($(selectpage).length)||!($(selectsize).length)) {
+            window.location.replace("http://localhost:81/main.php?sort=disabled&page=1&pagesize=5")
+        }
         $(selectsort).prop('selected',true)
         $(selectpage).prop('selected',true)
         $(selectsize).prop('selected',true)
