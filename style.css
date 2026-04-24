@@ -14,7 +14,8 @@ h4 {
 }
 
 textarea {
-    height: 1rem;
+    height: 1.3em;
+    resize: none;
 }
 
 td {
@@ -26,17 +27,31 @@ img {
     min-width: 150px;
 }
 
-input, textarea, select, button {
+input, textarea, select, button, select, ::picker(select) {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid gray;
     background-color: #2b343b;
+    border-radius: 0px;
     color: white;
+    appearance: base-select;
 }
 
 input::placeholder, textarea::placeholder, legend {
     color: lightgray;
 }
 
-a, .completed {
+a, .completed, option::checkmark {
     color: #ec7f22;
+}
+
+select::picker-icon {
+  color: #ec7f22;
+  font-size: 1em;
+  transition: 0.5s rotate;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
 }
 
 #login, #checklist, #checklistuser {
