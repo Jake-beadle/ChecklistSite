@@ -1,19 +1,54 @@
 <?php
-    session_start();
-    // If a user attempts to access the page without session data being set (which is 
-    // needed for the page to work properly), redirects the user back to the login page
-    if (!isset($_SESSION['user']) && !isset($_SESSION['perms'])){ 
-        header("Location: /login.php");
+session_start();
+// If a user attempts to access the page without session data being set (which is 
+// needed for the page to work properly), redirects the user back to the login page
+if (!isset($_SESSION['user']) && !isset($_SESSION['perms'])){ 
+    header("Location: /login.php");
+}
+$conn = mysqli_connect("", "", "", "");
+// Only shows a small amount of entries in the table at once to prevent the site running slowly (can be changed by the user if needed)
+if(isset($_GET['pagesize'])) {
+    $pagesize = $_GET['pagesize'];
+}
+else {
+    $pagesize = 5;
+}
+// Queries that are used for filling out the table (as well as the drop-down list using the first query)
+// Three of the queries below are the same, but different variables are needed so that they can be used more than once (usages explained later)
+$devicequery = "SELECT * FROM checklistsinfo WHERE Deleted != 1";
+$infoquery = $devicequery;
+$checkquery = "SELECT * FROM checklists WHERE Deleted != 1";
+$amountquery = $devicequery;
+// If a sort has been specified by the user, it returns a different query to normal, sorting by the date that an entry was last edited
+if(isset($_GET['sort'])) {
+    if ($_GET['sort'] == 'newest')
+    {
+        $infoquery .= " ORDER BY Dateofcheck DESC";
+        $checkquery .= " ORDER BY Datechecked DESC";
     }
-    $conn = mysqli_connect("", "", "", "");
-    // Queries that are used for filling out the table (as well as the drop-down list using the first query)
-    // The two queries below are the same, but two variables are needed so that it can be used more than once (usages explained later)
-    $devicequery = "SELECT * FROM checklistsinfo WHERE Deleted != 1";
-    $deviceresult = mysqli_query($conn, $devicequery);
-    $infoquery = "SELECT * FROM checklistsinfo WHERE Deleted != 1";
-    $inforesult = mysqli_query($conn, $infoquery);
-    $checkquery = "SELECT * FROM checklists WHERE Deleted != 1";
-    $checkresult = mysqli_query($conn, $checkquery);
+    elseif ($_GET['sort'] == 'oldest')
+    {
+        $infoquery .= " ORDER BY Dateofcheck ASC";
+        $checkquery .= " ORDER BY Datechecked ASC";
+    }
+}
+// Then limits the amount of devices shown on one page as specified by the user (uses 5 entries if not)
+$devicequery .= " LIMIT ".$pagesize;
+$infoquery .= " LIMIT ".$pagesize;
+$checkquery .= " LIMIT ".$pagesize;
+// Finds out how many entries there are that haven't been deleted
+$amountresult = mysqli_query($conn, $amountquery);
+$amount = mysqli_num_rows($amountresult);
+// If a page has been selected, it gets the current page and offsets the query by the amount needed
+if(isset($_GET['page'])) {
+    $currpage = $_GET['page'] - 1;
+    $devicequery .= " OFFSET ".($currpage*$pagesize);
+    $infoquery .= " OFFSET ".($currpage*$pagesize);
+    $checkquery .= " OFFSET ".($currpage*$pagesize); 
+};
+$deviceresult = mysqli_query($conn, $devicequery);
+$inforesult = mysqli_query($conn, $infoquery);
+$checkresult = mysqli_query($conn, $checkquery);
 ?>
 
 <!DOCTYPE html>
@@ -52,11 +87,37 @@
     ?>
     <!-- Logs the user out, sending them back to the login page -->
     <a href="./methods/accountlogout.php"><button>Log out of your account</button></a>
-    <h2>Select a device from the drop-down list below to get its details:</h2>
-    <h4>(alternatively, you can use it to search if you know the device's name)</h4>
-    <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar -->
-    <!-- Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once) --><!-- Searching a PC's name (or part of it) will make it appear in the table -->
-    <input list="devices" id="deviceselect" name="deviceselect"><br><br> 
+    <h2>Select a device from the drop-down list below (or search its name) to get its details:</h2>
+    <!-- Lets the user sort the returned rows by date based on their selection -->
+    <label for="datesort"><i>Sort by date (visible when searching, not when using dropdown):</i></label>
+    <select class="urlchange" id="datesort" name="datesort">
+        <option value="disabled">Disabled</option>
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+    </select><br><br> 
+    <!-- Changes the page that the user is on to show different entries from the table -->
+    <label for="pagechange">Currently on page</label>
+    <select class="urlchange" id="pagechange" name="pagechange">
+        <?php 
+            $pagecount = ceil($amount/$pagesize);
+            for ($page = 1; $page <= $pagecount; $page++) {
+                echo '<option value='.$page.'>'.$page.'</option>';
+            }
+        ?>   
+    </select>
+    <!-- Can be used to limit the amount of entries that can be shown at once to prevent lag for the user (which could happen if there were large amounts of entries shown at once) -->
+    <label for="pagesize">. Entries per page: </label>
+    <select class="urlchange" id="pagesize" name="pagesize">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select><br><br> 
+    <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar
+    Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once)
+    Searching a PC's name (or part of it) will make it appear in the table -->
+    <input list="devices" id="deviceselect" name="deviceselect">
     <datalist id='devices' name='devices'>  
         <?php 
         while ($deviceoption = mysqli_fetch_assoc($deviceresult)) {
@@ -119,8 +180,8 @@
                         // Variable used for the reminder (see the p element below)
                         $allchecks = 0;
                         foreach($checkrow as $check => $value) {
-                            // $checkrow returns all columns, but the first (ChecklistID) and last (Deleted) are unneeded for the checklist
-                            if ($check != "ChecklistID" && $check != "Deleted") {
+                            // $checkrow would return all columns, but some (ChecklistID, Deleted, Datechecked) are unneeded for the checklist
+                            if ($check != "ChecklistID" && $check != "Deleted" && $check != "Datechecked") {
                                 // Variable used to get the description for the check (rather than its name in the database)
                                 $index = array_search($check,$checknames);
                                 // Adds a checkbox for each of the remaining columns (which is checked or unchecked depending on its value, being 0 or 1)
@@ -159,6 +220,19 @@
 </html>
 <script>
     $(document).ready(function(){
+        // Gets the parameters/settings for the table from the URL and sets them as the chosen value for the select elements
+        let string = window.location.search
+        let parameter = new URLSearchParams(string)
+        let sortby = parameter.get("sort")
+        let currentpage = parameter.get("page")
+        let currentsize = parameter.get("pagesize")
+        let selectsort = $(document).find(`#datesort option[value=${sortby}]`)
+        let selectpage = $(document).find(`#pagechange option[value=${currentpage}]`)
+        let selectsize = $(document).find(`#pagesize option[value=${currentsize}]`)
+        $(selectsort).prop('selected',true)
+        $(selectpage).prop('selected',true)
+        $(selectsize).prop('selected',true)
+        // After the 'add PC' form gets selected, it gets added to the database here
         $("#checklist").submit(function(event){
             event.preventDefault();
             var data = $(this).serializeArray();
@@ -166,7 +240,7 @@
                     // Shows the user if the new data has been added (and if not, what went wrong)
                     $("#result").html(response); 
                     // Waits 2 seconds before reloading the page (enough time for the user to read the response)
-                    setTimeout(function() { location.reload(true); }, 2000); 
+                    setTimeout(function() { location.reload(true); }, 2000);
             })
         })
     })
@@ -244,6 +318,18 @@
         }
     })
 
+    // When an element that would edit the URL gets changed, it gets the values of all elements and updates the page
+    $(document).on("change", ".urlchange", function(){
+        sort = $(document).find('#datesort').val()
+        page = $(document).find('#pagechange').val()
+        size = $(document).find('#pagesize').val()
+        let url = new URL('http://localhost:81/main.php')
+        url.searchParams.set('sort',sort)
+        url.searchParams.set('page',page)
+        url.searchParams.set('pagesize',size)
+        window.location.replace(url)
+    })
+
     $("#deviceselect").on("input",function(){
         // Unhides the table after it has been used for the first time, which improves appearance 
         // (otherwise it would only have had the titles of each column with no values under them)
@@ -252,20 +338,21 @@
         }
         // Sets the input to lowercase to make it ignore capitals, making iit easier to search (name of pc is also set to lowercase later for this reason)
         let search = $(document).find('#deviceselect').val().toLowerCase()
-        // Gets the rows inside the table body and saves it as an array (so they can be iterated through)
-        let rows = $(document).find('tbody tr')
-        for (let i = 0; i < rows.length; i++) {
-            // Finds the current row and gets the name of the PC on that row
-            var row = rows[i]
-            name = $(row).find('#PCname').html()
-            name = name.replace('Name of PC: ','').toLowerCase()
-            // If the searched text is part of the name, the row for that PC will be shown to the user
-            if (name.includes(search)) {
-                $(row).attr("hidden",false)
-            // If not, it gets hidden (so that it only shows the PCs that the user wants to see)
-            } else {
-                $(row).attr("hidden",true)
+        if (search.length >= 3) {
+            // Gets the rows inside the table body and saves it as an array (so they can be iterated through)
+            let rows = $(document).find('tbody tr')
+            for (let i = 0; i < rows.length; i++) {
+                // Finds the current row and gets the name of the PC on that row
+                var row = rows[i]
+                name = $(row).find('#PCname').html()
+                name = name.replace('Name of PC: ','').toLowerCase()
+                // If the searched text is part of the name, the row for that PC will be shown to the user
+                if (name.includes(search)) {
+                    $(row).attr("hidden",false)
+                // If not, it gets hidden (so that it only shows the PCs that the user wants to see)
+                } else {
+                    $(row).attr("hidden",true)
+                }
             }
-        }
-        })
+    }})
 </script>
