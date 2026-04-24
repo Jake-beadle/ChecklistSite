@@ -74,7 +74,7 @@
                                 <button id='cancelEditUser' hidden>Cancel editing</button>";
                         }
                         else {
-                            echo "<p style='color:orange'>To avoid issues, the default admin account cannot be altered.</p>";
+                            echo "<p style='color:#ec7f22'>To avoid issues with creating accounts, the default admin account cannot be altered.</p>";
                         }
                         echo "</td>
                         </tr>";
