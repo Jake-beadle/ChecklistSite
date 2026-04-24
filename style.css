@@ -54,6 +54,25 @@ select:open::picker-icon {
   rotate: 180deg;
 }
 
+option::checkmark { 
+    font-weight: bold;   
+}
+
+::picker(select) {
+  opacity: 0;
+  transition: all 0.2s allow-discrete;
+}
+
+:open::picker(select) {
+  opacity: 1;
+}
+
+@starting-style {
+  :open::picker(select) {
+    opacity: 0;
+  }
+}
+
 #login, #checklist, #checklistuser {
     border-radius: 3px;
     display: inline-block;
@@ -64,9 +83,9 @@ select:open::picker-icon {
 }
 
 #login, #checklist, #checklistuser, #checklisttable, #usertable {
-    border: 2px solid black;
+    border: 2px solid rgb(100, 100, 100);
     background-color: #2f3b44;
-    padding: 8px 16px; 
+    padding: 8px 16px;
 }
 
 #Checklist {
