@@ -16,7 +16,7 @@ if($updateID == 1) {
     echo "The admin account cannot be updated outside of the database.";
     exit;
 }
-$conn = mysqli_connect("scconco2.pc.scunthorpe.corusgroup.com", "fieldserviceseditor", "fieldservices", "field_services");
+$conn = mysqli_connect("", "", "", "");
 // Updates the information for the account selected (ID taken from the row being changed)
 $query = "UPDATE logininfo SET Username = '$user', Permissions = '$perms' WHERE UserID = '$updateID'";
 if(!$result = mysqli_query($conn, $query))
