@@ -118,6 +118,7 @@ $checkresult = mysqli_query($conn, $checkquery);
     <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar
     Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once)
     Searching a PC's name (or part of it) will make it appear in the table -->
+    <label for="deviceselect">Select/search for device:</label>
     <input list="devices" id="deviceselect" name="deviceselect">
     <datalist id='devices' name='devices'>  
         <?php 
