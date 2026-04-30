@@ -7,7 +7,7 @@
     $username = $_SESSION['user'];
     $conn = mysqli_connect("", "", "", "");
     // Using inspect element would let you add edit buttons to the admin row and delete the account, which shouldn't be possible. This prevents that from happening
-    if($updateID == 1) {
+    if($deleteID == 1) {
         echo "The admin account cannot be deleted from the database.";
         exit;
     }
