@@ -35,7 +35,14 @@ else {
     $mail->isSMTP();                                            //Send using SMTP
     $mail->Host       = '';                                     //Set the SMTP server to send through. Will need to be added by the user
     $mail->Port       = 25;                                    //TCP port to connect to; use
-
+    $mail->SMTPOptions = array(                                //These settings prevent emails from being blocked due to certificates
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+        )
+    );
+    
     //Recipients
     $mail->setFrom('', 'Checklist Site');       // First string will need to be replaced by an email address that is being used by the server
     $mail->addAddress($email, $username);     //Add a recipient
