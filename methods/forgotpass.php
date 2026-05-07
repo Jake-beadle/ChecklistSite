@@ -38,7 +38,7 @@ else {
 
     //Recipients
     $mail->setFrom('', 'Checklist Site');       // First string will need to be replaced by an email address that is being used by the server
-    $mail->addAddress($email, 'Joe User');     //Add a recipient
+    $mail->addAddress($email, $username);     //Add a recipient
 
     //Subject
     $mail->Subject = 'Account Recovery';
