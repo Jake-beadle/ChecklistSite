@@ -26,6 +26,21 @@ if (!($emailIsValid)) {
     echo "Email is in the incorrect format, please try again";
     exit;
 }
+// Makes sure that the entered username and email haven't already been added to the database (includes deleted users)
+$userDupe = "SELECT Username FROM logininfo WHERE Username = '$user'";
+$emailDupe = "SELECT Email FROM logininfo WHERE Email = '$email'";
+$userQuery = mysqli_query($conn,$userDupe); 
+$emailQuery = mysqli_query($conn,$emailDupe); 
+$userTest = mysqli_num_rows($userQuery);
+$emailTest = mysqli_num_rows($emailQuery);
+if ($userTest > 0) { 
+    echo "Error: username entered has already been used, try another";
+    exit;
+}  
+else if ($emailTest > 0) { 
+    echo "Error: email entered has already been used, try another";
+    exit;
+}  
 $conn = mysqli_connect("", "", "", "");
 // Updates the information for the account selected (ID taken from the row being changed)
 $query = "UPDATE logininfo SET Username = '$user', Email = '$email', Permissions = '$perms' WHERE UserID = '$updateID'";
