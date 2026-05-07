@@ -63,7 +63,7 @@ else {
     //Subject
     $mail->isHTML(true);
     $mail->Subject = 'Account Recovery - password reset';
-    $mail->Body    = "Hello ".$username.",<br>A password reset was requested for this email. You can reset your password using this link: <a href=".$passResetLink.">".$passResetLink."</a>.<br>If you didn't request this, please ignore this email, and for any further assistance, please notify admins";
+    $mail->Body    = "Hello ".$username.",<br>A password reset was requested for this email. You can reset your password using this link, which expires in 15 minutes: <a href=".$passResetLink.">".$passResetLink."</a>.<br>If you didn't request this, please ignore this email, and for any further assistance, please notify admins";
     $mail->send();
     echo 'Email has been sent';
     } catch (Exception $e) {
