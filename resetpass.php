@@ -27,8 +27,10 @@ if (strlen($urltoken) != 64) {
         $expiry = $values["ExpiryTime"];
         $currtime = time();
         // Finally, it checks its expiry time to check if the token has expired or not
-        if ($currtime > $expiry) {
+        if (($currtime > $expiry) or $values["Unusable"] == 1) {
             $_SESSION['reseterr'] = '<script>alert("Token was invalid (expired), redirected to login page.")</script>';
+            $removeQuery = "UPDATE resettokens SET Unusable = 1 WHERE Token = '$token'";
+            $remove = mysqli_query($conn, $removeQuery);
             header("Location: /login.php");
         }
     }

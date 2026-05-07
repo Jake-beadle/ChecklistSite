@@ -37,9 +37,9 @@ if (!($newPass == $confPass)) {
         else
         {
             echo "Successfully updated database";
-            // If it worked properly, it removes the row with that token so that it can't be reused
-            $tokenQuery = "DELETE FROM resettokens WHERE Token = '$token'";
-            $remove = mysqli_query($conn, $tokenQuery);
+            // If it worked properly, it disables the row with that token so that it can't be reused
+            $removeQuery = "UPDATE resettokens SET Unusable = 1 WHERE Token = '$token'";
+            $remove = mysqli_query($conn, $removeQuery);
         }
     }
 }
