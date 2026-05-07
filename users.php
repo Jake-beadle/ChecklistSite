@@ -27,6 +27,8 @@
     <form id="checklistuser" action="" method="post">
         <label for="user">Username:</label>
         <input type="text" id="user" name="user" placeholder="Enter username"><br><br>
+        <label for="email">Email address:</label>
+        <input type="text" id="email" name="email" placeholder="Enter email"><br><br>
         <label for="pass">Password:</label>
         <input type="password" id="pass" name="pass" placeholder="Enter password"><br><br>
         <label for="perms">Permissions type:</label>
@@ -57,6 +59,8 @@
                         <td id='UserInfo'>
                             <p id='Username'>Username: ".$row['Username']."</p>
                             <p id='UsernameEditP' hidden>Username: <input type=text id='UsernameEdit' value=".$row['Username']."></p>
+                            <p id='Email'>Email address: ".$row['Email']."</p>
+                            <p id='EmailEditP' hidden>Email: <input type=text id='EmailEdit' value=".$row['Email']."></p>
                             <p id='Permissions'>Permissions level: ".$row['Permissions']."</p>
                             <p id='PermissionsEditP' hidden>Permissions level: <select id='PermsEdit'>
                                 <option value='user'>User</option>
@@ -67,7 +71,7 @@
                         // The 'testadmin' account is intentionally not changeable as if if it was deleted, it could lead to no accounts existing in the database
                         // This would make the main parts of the site inaccessible without manually adding an account to the database, which is undesirable
                         // Therefore the easiest solution is to add an admin account which cannot be deleted (so that it can create more accounts if needed)
-                        if($row["Username"] != "Testadmin") {
+                        if($row["UserID"] != 1) {
                                 echo "<button id='editUser'>Edit user details</button>
                                 <button id='finishEditUser' hidden>Finish changing details</button><br><br>
                                 <button id='deleteUser'>Delete user</button>
@@ -75,7 +79,7 @@
                         }
                         else {
                             echo "<p style='color:#ec7f22'>To avoid issues with creating accounts, the default admin account cannot be altered.</p>";
-                        }
+                        } 
                         echo "</td>
                         </tr>";
                     }

@@ -15,3 +15,18 @@ $(document).ready(function(){
         })
     })
 })
+
+// Shows a form to the user that can be used to get their password from the database if they forget it
+$(document).on("click", "#forgotpass", function(){
+    $(document).find("#forgotpassdiv").attr("hidden", false)
+    $("#forgotpassform").submit(function(event){
+        event.preventDefault();
+        var data = $(this).serializeArray();
+            $.post("../methods/forgotpass.php", data, function(response) {
+                // Shows the user whether an email was sent or not
+                $("#result").html(response);
+                // Refreshes the page after two seconds have passed
+                setTimeout(function() { location.reload(true); }, 2000);
+        })
+    })
+})

@@ -7,6 +7,7 @@ $(document).ready(function(){
                 $("#result").html(response);
                 // Resets the values in the textbox (so that multiple of the same accounts aren't created before the page refreshes)
                 document.getElementById("user").value = ""
+                document.getElementById("email").value = ""
                 document.getElementById("pass").value = ""
                 // Refreshes the page after two seconds have passed
                 setTimeout(function() { location.reload(true); }, 2000);
@@ -18,10 +19,12 @@ $(document).ready(function(){
 $(document).on("click", "#editUser", function(){
     let rowToEdit = $(this).closest("tr"); 
     $(rowToEdit).find("#Username").attr("hidden", true)
+    $(rowToEdit).find("#Email").attr("hidden", true)
     $(rowToEdit).find("#Permissions").attr("hidden", true)
     $(rowToEdit).find("#editUser").attr("hidden", true)
     $(rowToEdit).find("#deleteUser").attr("hidden", true)
     $(rowToEdit).find("#UsernameEditP").attr("hidden", false)
+    $(rowToEdit).find("#EmailEditP").attr("hidden", false)
     $(rowToEdit).find("#PermissionsEditP").attr("hidden", false)
     $(rowToEdit).find("#finishEditUser").attr("hidden", false)
     $(rowToEdit).find("#cancelEditUser").attr("hidden", false)
@@ -30,10 +33,12 @@ $(document).on("click", "#editUser", function(){
 $(document).on("click", "#cancelEditUser", function(){
     let rowToEdit = $(this).closest("tr");
     $(rowToEdit).find("#Username").attr("hidden", false)
+    $(rowToEdit).find("#Email").attr("hidden", false)
     $(rowToEdit).find("#Permissions").attr("hidden", false)
     $(rowToEdit).find("#editUser").attr("hidden", false)
     $(rowToEdit).find("#deleteUser").attr("hidden", false)
     $(rowToEdit).find("#UsernameEditP").attr("hidden", true)
+    $(rowToEdit).find("#EmailEditP").attr("hidden", true)
     $(rowToEdit).find("#PermissionsEditP").attr("hidden", true)
     $(rowToEdit).find("#finishEditUser").attr("hidden", true)
     $(rowToEdit).find("#cancelEditUser").attr("hidden", true)
@@ -44,9 +49,10 @@ $(document).on("click", "#finishEditUser", function(){
     let rowToEdit = $(this).closest("tr");
     let idOfRow = $(rowToEdit).find('#UserID').html()
     let newUser = $(rowToEdit).find('#UsernameEdit').val()
+    let newEmail = $(rowToEdit).find('#EmailEdit').val()
     let newPerms = $(rowToEdit).find('#PermsEdit option:selected').text()
     if (confirm("Are you sure you want to edit this user's details? (page will refresh afterwards)") == true) {
-        $.post("../methods/accountupdate.php", {"idToUpdate": idOfRow, "newUser": newUser, "newPerms": newPerms}, function(response) {
+        $.post("../methods/accountupdate.php", {"idToUpdate": idOfRow, "newUser": newUser, "newEmail": newEmail, "newPerms": newPerms}, function(response) {
             $("#result").html(response);
             setTimeout(function() { location.reload(true); }, 2000);
         })
