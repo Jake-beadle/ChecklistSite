@@ -80,7 +80,7 @@ $checkresult = mysqli_query($conn, $checkquery);
     </form>
     <p id="result"></p>
     <?php
-    if ($_SESSION['perms'] == 'Admin') {    // If someone is an admin, they are given access to the user table
+    if ($_SESSION['perms'] == 'Admin') { // If someone is an admin, they are given access to the user table
         echo "<p><em>This account is an admin - you can access user details (and edit them) <a href='/users.php'>here</a></em></p>";
     }
     // Shows the user's name and permissions while using the site
@@ -90,21 +90,11 @@ $checkresult = mysqli_query($conn, $checkquery);
     <a href="./methods/accountlogout.php"><button>Log out of your account</button></a>
     <h2>Select a device from the drop-down list below (or search its name) to get its details:</h2>
     <!-- Lets the user sort the returned rows by date based on their selection -->
-    <label for="datesort"><i>Sort by date (visible when searching, not when using dropdown):</i></label>
+    <label for="datesort">Sort by date created/edited:</label>
     <select class="urlchange" id="datesort" name="datesort">
         <option value="disabled">Disabled</option>
         <option value="newest">Newest</option>
         <option value="oldest">Oldest</option>
-    </select><br><br> 
-    <!-- Changes the page that the user is on to show different entries from the table -->
-    <label for="pagechange">Currently on page</label>
-    <select class="urlchange" id="pagechange" name="pagechange">
-        <?php 
-            $pagecount = ceil($amount/$pagesize);
-            for ($page = 1; $page <= $pagecount; $page++) {
-                echo '<option value='.$page.'>'.$page.'</option>';
-            }
-        ?>   
     </select>
     <!-- Can be used to limit the amount of entries that can be shown at once to prevent lag for the user (which could happen if there were large amounts of entries shown at once) -->
     <label for="pagesize">, entries per page: </label>
@@ -114,7 +104,23 @@ $checkresult = mysqli_query($conn, $checkquery);
         <option value="25">25</option>
         <option value="50">50</option>
         <option value="100">100</option>
-    </select><br><br> 
+    </select><br><br>
+    <!-- Changes the page that the user is on to show different entries from the table -->
+    <button id="prevpage">Previous page</button>
+    <label for="pagechange">Currently on page</label>
+    <select class="urlchange" id="pagechange" name="pagechange">
+        <?php 
+            $pagecount = ceil($amount/$pagesize);
+            for ($page = 1; $page <= $pagecount; $page++) {
+                if ($page == $pagecount) {
+                    echo '<option class="lastpage" value='.$page.'>'.$page.'</option>'; 
+                } else {
+                    echo '<option value='.$page.'>'.$page.'</option>';
+                }
+            }
+        ?>   
+    </select>
+    <button id="nextpage">Next page</button><br><br>
     <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar
     Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once)
     Searching a PC's name (or part of it) will make it appear in the table -->
@@ -128,8 +134,8 @@ $checkresult = mysqli_query($conn, $checkquery);
         ?>
     </datalist>
     <!-- Table that contains checklists and information for each PC.
-    Contains all of the data from the database, but only shows the 
-    entries that the user has selected using the above methods -->
+    Initially shows all information for that page, but can change what
+    entries are shown by using the search/dropdown above -->
     <table id="checklisttable">
         <thead>
             <th hidden>ID</th>
@@ -145,16 +151,11 @@ $checkresult = mysqli_query($conn, $checkquery);
                         // Used to fill out the checklist later on (as the descriptions aren't saved to the database)
                         $checknames = ['Sentinelinstall','Windowsupdate','Deviceenrolled','Assettag',
                         'Localreset','Diskcheck','Antivirusupdated','Userdata','Networktest','Softwareinstall'];
-                        $checkdescriptions = ["Sentinel One installed and running",
-                            "Windows Updates installed",
-                            "Device enrolled in Intune / MDM",
-                            "Asset Tag checked",
-                            "Local admin password reset",
-                            "Antivirus definitions updated",
-                            "Disk health checked",
-                            "User data removed or backed up",
-                            "Network test completed",
-                            "Standard software pack installed"    
+                        $checkdescriptions = ["Sentinel One installed and running","Windows Updates installed",
+                            "Device enrolled in Intune / MDM","Asset Tag checked",
+                            "Local admin password reset","Antivirus definitions updated",
+                            "Disk health checked","User data removed or backed up",
+                            "Network test completed","Standard software pack installed"    
                         ];
                         $checkrow = mysqli_fetch_assoc($checkresult);
                         echo "<tr id='Entry".$inforow['ComputerID']."'>
@@ -162,6 +163,14 @@ $checkresult = mysqli_query($conn, $checkquery);
                         <td id='PCUserInfo'>
                             <p id='PCname'>Name of PC: ".$inforow['PCname']."</p>
                             <p id='PCnameEditP' hidden>Name of PC: <input type=text id='PCnameEdit' value=".$inforow['PCname']."></p>
+                            <p id='Status'>Status: ".$inforow['Status']."</p>
+                            <p id='StatusEditP' hidden>Plant: 
+                            <select id='StatusEdit' name='StatusEdit'>
+                                <option value='received'>Received</option>
+                                <option value='inprogress'>In progress</option>
+                                <option value='passed'>Passed</option>
+                                <option value='failed'>Failed</option>
+                            </select></p>
                             <p id='PlantSub'>Plant: ".$inforow['Plant'].", sub-location: ".$inforow['Sublocation']."</p>
                             <p id='PlantSubEditP' hidden>Plant: 
                             <select id='PlantEdit' name='PlantEdit'>

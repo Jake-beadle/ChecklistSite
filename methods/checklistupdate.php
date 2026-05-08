@@ -5,6 +5,10 @@ if(isset($_POST["newName"]))
     {
         $name = $_POST["newName"];
     }
+if(isset($_POST["newStatus"]))
+    {
+        $status = $_POST["newStatus"];
+    }
 if(isset($_POST["newPlant"]))
     {
         $plant = $_POST["newPlant"];
@@ -47,7 +51,7 @@ foreach ($checkarray as $check => $checked) {
 }
 $conn = mysqli_connect("", "", "", "");
 // First updates the information about the computer using the text variables, then the checklists which uses the sentence from before in the query
-$infoquery = "UPDATE checklistsinfo SET PCname = '$name', Plant = '$plant', Sublocation = '$sub', Updatedby = '$username', Dateofcheck = CURRENT_TIMESTAMP WHERE ComputerID = '$updateID'";
+$infoquery = "UPDATE checklistsinfo SET PCname = '$name', Plant = '$plant', Status = '$status', Sublocation = '$sub', Updatedby = '$username', Dateofcheck = CURRENT_TIMESTAMP WHERE ComputerID = '$updateID'";
 $checkquery = "UPDATE checklists SET ".$checkstoset.", Datechecked = CURRENT_TIMESTAMP WHERE ChecklistID = $updateID";
 if(!$inforesult = mysqli_query($conn, $infoquery))
 {

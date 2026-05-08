@@ -34,11 +34,13 @@ $(document).ready(function(){
     $(document).on("click", "#editEntry", function(){
         let rowToEdit = $(this).closest("tr");
         $(rowToEdit).find("#PCname").attr("hidden", true)
+        $(rowToEdit).find("#Status").attr("hidden", true)
         $(rowToEdit).find("#PlantSub").attr("hidden", true)
         $(rowToEdit).find("#editEntry").attr("hidden", true)
         $(rowToEdit).find("#deleteEntry").attr("hidden", true)
         $(rowToEdit).find(".Default").attr("hidden", true)
         $(rowToEdit).find("#PCnameEditP").attr("hidden", false)
+        $(rowToEdit).find("#StatusEditP").attr("hidden", false)
         $(rowToEdit).find("#PlantSubEditP").attr("hidden", false)
         $(rowToEdit).find("#finishEditEntry").attr("hidden", false)
         $(rowToEdit).find("#cancelEditEntry").attr("hidden", false)
@@ -49,11 +51,13 @@ $(document).ready(function(){
     $(document).on("click", "#cancelEditEntry", function(){
         let rowToEdit = $(this).closest("tr");
         $(rowToEdit).find("#PCname").attr("hidden", false)
+        $(rowToEdit).find("#Status").attr("hidden", false)
         $(rowToEdit).find("#PlantSub").attr("hidden", false)
         $(rowToEdit).find("#editEntry").attr("hidden", false)
         $(rowToEdit).find("#deleteEntry").attr("hidden", false)
         $(rowToEdit).find(".Default").attr("hidden", false)
         $(rowToEdit).find("#PCnameEditP").attr("hidden", true)
+        $(rowToEdit).find("#StatusEditP").attr("hidden", true)
         $(rowToEdit).find("#PlantSubEditP").attr("hidden", true)
         $(rowToEdit).find("#finishEditEntry").attr("hidden", true)
         $(rowToEdit).find("#cancelEditEntry").attr("hidden", true)
@@ -67,6 +71,7 @@ $(document).ready(function(){
         let rowToEdit = $(this).closest("tr");
         let idOfRow = $(rowToEdit).find('#ComputerID').html()
         let newName = $(rowToEdit).find('#PCnameEdit').val()
+        let newStatus = $(rowToEdit).find('#StatusEdit option:selected').text()
         let newPlant = $(rowToEdit).find('#PlantEdit option:selected').text()
         let newSub = $(rowToEdit).find('#SublocationEdit').val()
         let checks = $(rowToEdit).find(".Edit input")
@@ -82,7 +87,7 @@ $(document).ready(function(){
             }
         }
         if (confirm("Are you sure you want to edit this entry? (page will refresh afterwards)") == true) {
-            $.post("../methods/checklistupdate.php", {"idToUpdate": idOfRow, "newName": newName, "newPlant": newPlant, "newSub": newSub, "checklistArray": checkArray}, function(response) {
+            $.post("../methods/checklistupdate.php", {"idToUpdate": idOfRow, "newName": newName, "newStatus": newStatus, "newPlant": newPlant, "newSub": newSub, "checklistArray": checkArray}, function(response) {
                 $("#result").html(response)
                 setTimeout(function() { location.reload(true); }, 2000);
             })
@@ -111,6 +116,36 @@ $(document).ready(function(){
         url.searchParams.set('page',page)
         url.searchParams.set('pagesize',size)
         window.location.replace(url)
+    })
+
+    // Used for buttons that will show the previous/next page
+    $(document).on("click", "#prevpage", function(){
+        page = $(document).find('#pagechange').val()
+        if (!(page == 1)) {
+            sort = $(document).find('#datesort').val()
+            size = $(document).find('#pagesize').val()
+            page = parseInt(page) - 1
+            let url = new URL('http://localhost:81/main.php')
+            url.searchParams.set('sort',sort)
+            url.searchParams.set('page',page)
+            url.searchParams.set('pagesize',size)
+            window.location.replace(url)
+        }
+    })
+    $(document).on("click", "#nextpage", function(){
+        select = $(document).find('#pagechange')
+        page = $(document).find('#pagechange').val()
+        pages = $(document).find('.lastpage').val()
+        if (!(page == pages)) {
+            sort = $(document).find('#datesort').val()
+            size = $(document).find('#pagesize').val()
+            page = parseInt(page) + 1
+            let url = new URL('http://localhost:81/main.php')
+            url.searchParams.set('sort',sort)
+            url.searchParams.set('page',page)
+            url.searchParams.set('pagesize',size)
+            window.location.replace(url)
+        }
     })
 
     $("#deviceselect").on("input",function(){
