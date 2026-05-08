@@ -13,10 +13,10 @@ if(isset($_POST["email"]))
     $email = $_POST["email"];
 }   
 // Gets the userid associated with that email (if no users are found with that email, an error message is returned instead)
-$idQuery = "SELECT UserID FROM logininfo WHERE Email = '$email'";
+$idQuery = "SELECT UserID FROM logininfo WHERE Email = '$email' AND Deleted = '0'";
 $idResult = mysqli_query($conn,$idQuery); 
 $emailTest = mysqli_num_rows($idResult);
-if ($emailTest = 0) { 
+if ($emailTest == 0) { 
     echo "Error: no users were found with that email, try again";
     exit;
 }   
