@@ -75,7 +75,27 @@ $checkresult = mysqli_query($conn, $checkquery);
             <option value="immingham">Immingham</option>
         </select><br><br>
         <label for="sub">Sub-location:</label>
-        <textarea type="textbox" id="sub" name="sub" placeholder="Enter sub-location" required></textarea><br><br>
+        <input list="sublocations" id="sub" name="sub">
+        <datalist id='sublocations' name='sublocations'>
+            <option>Blast Furnaces</option>
+            <option>BOS Plant</option>
+            <option>Concast (Caster 4)</option>
+            <option>Concast (Caster 5)</option>
+            <option>SRSM 1</option>
+            <option>SRSM 2</option>
+            <option>CPS</option>
+            <option>Turbos</option>
+            <option>Outstations</option>
+            <option>Rod Mill</option>
+            <option>Central Labs</option>
+            <option>RSC/Area 3</option>
+            <option>OPP</option>
+            <option>OBP</option>
+            <option>Sinter Plant</option>
+            <option>Coal Handling Plant</option>
+            <option>Billet Caster</option>
+            <option>Admin</option>
+        </datalist><br><br>
         <input type="submit">
     </form>
     <p id="result"></p>
@@ -142,6 +162,9 @@ $checkresult = mysqli_query($conn, $checkquery);
         <option value="skinningrove">Skinningrove</option>
         <option value="immingham">Immingham</option>
     </select><br><br>
+    <!-- Lets the user filter by the sublocation that the device is located at -->
+    <label for="subfilter">Filter by sub-location:</label>
+    <input list="sublocations" id="subfilter" name="subfilter"><br><br>
     <!-- Table that contains checklists and information for each PC.
     Initially shows all information for that page, but can change what
     entries are shown by using the search/dropdown above -->
@@ -180,7 +203,7 @@ $checkresult = mysqli_query($conn, $checkquery);
                                 <option value='passed'>Passed</option>
                                 <option value='failed'>Failed</option>
                             </select></p>
-                            <p id='PlantSub'>Plant: <span id='Plant'>".$inforow['Plant']."</span>, sub-location: ".$inforow['Sublocation']."</p>
+                            <p id='PlantSub'>Plant: <span id='Plant'>".$inforow['Plant']."</span>, sub-location: <span id='Sub'>".$inforow['Sublocation']."</span></p>
                             <p id='PlantSubEditP' hidden>Plant: 
                             <select id='PlantEdit' name='PlantEdit'>
                                 <option value='scunthorpe'>Scunthorpe</option>
@@ -188,7 +211,7 @@ $checkresult = mysqli_query($conn, $checkquery);
                                 <option value='skinningrove'>Skinningrove</option>
                                 <option value='immingham'>Immingham</option>
                             </select>
-                            , sub-location: <textarea id='SublocationEdit'>".$inforow['Sublocation']."</textarea></p>
+                            , sub-location: <input list='sublocations' id='SublocationEdit' name='SublocationEdit'></input></p>
                             <p id='Dateofcheck'>Date of last check/change: ".$inforow['Dateofcheck']."</p>
                             <p id='Createdby'>Created by: ".$inforow['Createdby']."</p>";
                             // If an entry hasn't been changed yet, this element will not appear
