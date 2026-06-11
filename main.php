@@ -164,7 +164,7 @@ $checkresult = mysqli_query($conn, $checkquery);
                             <p id='PCname'>Name of PC: ".$inforow['PCname']."</p>
                             <p id='PCnameEditP' hidden>Name of PC: <input type=text id='PCnameEdit' value=".$inforow['PCname']."></p>
                             <p id='Status'>Status: ".$inforow['Status']."</p>
-                            <p id='StatusEditP' hidden>Plant: 
+                            <p id='StatusEditP' hidden>Status: 
                             <select id='StatusEdit' name='StatusEdit'>
                                 <option value='received'>Received</option>
                                 <option value='inprogress'>In progress</option>

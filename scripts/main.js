@@ -26,6 +26,27 @@ $(document).ready(function(){
                     setTimeout(function() { location.reload(true); }, 2000);
             })
         })
+        $("#deviceselect").on("input",function(){
+            // Sets the input to lowercase to make it ignore capitals, making iit easier to search (name of pc is also set to lowercase later for this reason)
+            let search = $(document).find('#deviceselect').val().toLowerCase()
+            if (search.length >= 3) {
+                // Gets the rows inside the table body and saves it as an array (so they can be iterated through)
+                let rows = $(document).find('tbody tr')
+                for (let i = 0; i < rows.length; i++) {
+                    // Finds the current row and gets the name of the PC on that row
+                    var row = rows[i]
+                    name = $(row).find('#PCname').html()
+                    name = name.replace('Name of PC: ','').toLowerCase()
+                    // If the searched text is part of the name, the row for that PC will be shown to the user
+                    if (name.includes(search)) {
+                        $(row).attr("hidden",false)
+                    // If not, it gets hidden (so that it only shows the PCs that the user wants to see)
+                    } else {
+                        $(row).attr("hidden",true)
+                    }
+                }
+            }
+        })
     })
     
     // rowToEdit is used in multiple of these functions, but cannot be declared globablly as $(this) wouldn't work
@@ -132,6 +153,7 @@ $(document).ready(function(){
             window.location.replace(url)
         }
     })
+
     $(document).on("click", "#nextpage", function(){
         select = $(document).find('#pagechange')
         page = $(document).find('#pagechange').val()
@@ -145,27 +167,5 @@ $(document).ready(function(){
             url.searchParams.set('page',page)
             url.searchParams.set('pagesize',size)
             window.location.replace(url)
-        }
-    })
-
-    $("#deviceselect").on("input",function(){
-        // Sets the input to lowercase to make it ignore capitals, making iit easier to search (name of pc is also set to lowercase later for this reason)
-        let search = $(document).find('#deviceselect').val().toLowerCase()
-        if (search.length >= 3) {
-            // Gets the rows inside the table body and saves it as an array (so they can be iterated through)
-            let rows = $(document).find('tbody tr')
-            for (let i = 0; i < rows.length; i++) {
-                // Finds the current row and gets the name of the PC on that row
-                var row = rows[i]
-                name = $(row).find('#PCname').html()
-                name = name.replace('Name of PC: ','').toLowerCase()
-                // If the searched text is part of the name, the row for that PC will be shown to the user
-                if (name.includes(search)) {
-                    $(row).attr("hidden",false)
-                // If not, it gets hidden (so that it only shows the PCs that the user wants to see)
-                } else {
-                    $(row).attr("hidden",true)
-                }
-            }
         }
     })
