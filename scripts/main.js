@@ -29,21 +29,25 @@ $(document).ready(function(){
         $("#deviceselect").on("input",function(){
             // Sets the input to lowercase to make it ignore capitals, making it easier to search (name of pc is also set to lowercase later for this reason)
             let devicesearch = $(document).find('#deviceselect').val().toLowerCase()
-            // Then gets the chosen filter (including if it is disabled)
-            let filter = $(document).find('#plantfilter').val()
+            // Then gets the chosen plant filter (including if it is disabled)
+            let plantfilter = $(document).find('#plantfilter').val()
+            // Also gets the chosen status filter
+            let statusfilter = $(document).find('#statusfilter').val()
             // As well as the sublocation that the device is at
             let subsearch = $(document).find('#subfilter').val().toLowerCase()
             // Gets the rows inside the table body and saves it as an array (so they can be iterated through)
             let rows = $(document).find('tbody tr')
             for (let i = 0; i < rows.length; i++) {
-                // Finds the current row and gets the name of the PC on that row
+                // Finds the current row and gets the details about the PC on that row
                 var row = rows[i]
                 name = $(row).find('#PCname').html()
                 name = name.replace('Name of PC: ','').toLowerCase()
                 plant = $(row).find('#Plant').html().toLowerCase()
                 sub = $(row).find('#Sub').html().toLowerCase()
+                status = $(row).find('#Status').html()
+                status = status.replace('Status: ','').toLowerCase()
                 // If the searched text is part of the name (and the plant is correct if the filter is active), the row for that PC will be shown to the user
-                if (name.includes(devicesearch) && sub.includes(subsearch) && ((filter == "disabled") || (filter == plant))) {
+                if (name.includes(devicesearch) && sub.includes(subsearch) && ((plantfilter == "disabled") || (plantfilter == plant)) && ((statusfilter == "disabled") || (statusfilter == status))) {
                     $(row).attr("hidden",false)
                 // If not, it gets hidden (so that it only shows the PCs that the user wants to see)
                 } else {
@@ -52,10 +56,11 @@ $(document).ready(function(){
             }
         })
         // Same block of code as above but runs after changing the filters rather than changing the search.
-        // Moving this into a function breaks it for some reason so having to add the same code multiple
+        // Moving this into a function breaks it for some reason so having to add the same code multiple times
         $("#plantfilter").on("change",function(){
             let devicesearch = $(document).find('#deviceselect').val().toLowerCase()
-            let filter = $(document).find('#plantfilter').val()
+            let plantfilter = $(document).find('#plantfilter').val()
+            let statusfilter = $(document).find('#statusfilter').val()
             let subsearch = $(document).find('#subfilter').val().toLowerCase()
             let rows = $(document).find('tbody tr')
             for (let i = 0; i < rows.length; i++) {
@@ -64,7 +69,30 @@ $(document).ready(function(){
                 name = name.replace('Name of PC: ','').toLowerCase()
                 plant = $(row).find('#Plant').html().toLowerCase()
                 sub = $(row).find('#Sub').html().toLowerCase()
-                if (name.includes(devicesearch) && sub.includes(subsearch) && ((filter == "disabled") || (filter == plant))) {
+                status = $(row).find('#Status').html()
+                status = status.replace('Status: ','').toLowerCase()
+                if (name.includes(devicesearch) && sub.includes(subsearch) && ((plantfilter == "disabled") || (plantfilter == plant)) && ((statusfilter == "disabled") || (statusfilter == status))) {
+                    $(row).attr("hidden",false)
+                } else {
+                    $(row).attr("hidden",true)
+                }
+            }
+        })
+        $("#statusfilter").on("input",function(){
+            let devicesearch = $(document).find('#deviceselect').val().toLowerCase()
+            let plantfilter = $(document).find('#plantfilter').val()
+            let statusfilter = $(document).find('#statusfilter').val()
+            let subsearch = $(document).find('#subfilter').val().toLowerCase()
+            let rows = $(document).find('tbody tr')
+            for (let i = 0; i < rows.length; i++) {
+                var row = rows[i]
+                name = $(row).find('#PCname').html()
+                name = name.replace('Name of PC: ','').toLowerCase()
+                plant = $(row).find('#Plant').html().toLowerCase()
+                sub = $(row).find('#Sub').html().toLowerCase()
+                status = $(row).find('#Status').html()
+                status = status.replace('Status: ','').toLowerCase()
+                if (name.includes(devicesearch) && sub.includes(subsearch) && ((plantfilter == "disabled") || (plantfilter == plant)) && ((statusfilter == "disabled") || (statusfilter == status))) {
                     $(row).attr("hidden",false)
                 } else {
                     $(row).attr("hidden",true)
@@ -73,7 +101,8 @@ $(document).ready(function(){
         })
         $("#subfilter").on("input",function(){
             let devicesearch = $(document).find('#deviceselect').val().toLowerCase()
-            let filter = $(document).find('#plantfilter').val()
+            let plantfilter = $(document).find('#plantfilter').val()
+            let statusfilter = $(document).find('#statusfilter').val()
             let subsearch = $(document).find('#subfilter').val().toLowerCase()
             let rows = $(document).find('tbody tr')
             for (let i = 0; i < rows.length; i++) {
@@ -82,7 +111,9 @@ $(document).ready(function(){
                 name = name.replace('Name of PC: ','').toLowerCase()
                 plant = $(row).find('#Plant').html().toLowerCase()
                 sub = $(row).find('#Sub').html().toLowerCase()
-                if (name.includes(devicesearch) && sub.includes(subsearch) && ((filter == "disabled") || (filter == plant))) {
+                status = $(row).find('#Status').html()
+                status = status.replace('Status: ','').toLowerCase()
+                if (name.includes(devicesearch) && sub.includes(subsearch) && ((plantfilter == "disabled") || (plantfilter == plant)) && ((statusfilter == "disabled") || (statusfilter == status))) {
                     $(row).attr("hidden",false)
                 } else {
                     $(row).attr("hidden",true)

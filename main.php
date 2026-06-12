@@ -161,6 +161,15 @@ $checkresult = mysqli_query($conn, $checkquery);
         <option value="teesside">Teesside</option>
         <option value="skinningrove">Skinningrove</option>
         <option value="immingham">Immingham</option>
+    </select>
+    <!-- Lets the user filter by the testing status of the device -->
+    <label for="statusfilter">Filter by status:</label>
+    <select id="statusfilter" name="statusfilter">
+        <option value="disabled">Disabled</option>
+        <option value='received'>Received</option>
+        <option value='inprogress'>In progress</option>
+        <option value='passed'>Passed</option>
+        <option value='failed'>Failed</option>
     </select><br><br>
     <!-- Lets the user filter by the sublocation that the device is located at -->
     <label for="subfilter">Filter by sub-location:</label>
@@ -211,7 +220,7 @@ $checkresult = mysqli_query($conn, $checkquery);
                                 <option value='skinningrove'>Skinningrove</option>
                                 <option value='immingham'>Immingham</option>
                             </select>
-                            , sub-location: <input list='sublocations' id='SublocationEdit' name='SublocationEdit'></input></p>
+                            , sub-location: <input list='sublocations' id='SublocationEdit' name='SublocationEdit' value='".$inforow['Sublocation']."'></input></p>
                             <p id='Dateofcheck'>Date of last check/change: ".$inforow['Dateofcheck']."</p>
                             <p id='Createdby'>Created by: ".$inforow['Createdby']."</p>";
                             // If an entry hasn't been changed yet, this element will not appear
