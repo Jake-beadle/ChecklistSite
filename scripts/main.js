@@ -92,6 +92,8 @@ $(document).ready(function(){
                 sub = $(row).find('#Sub').html().toLowerCase()
                 status = $(row).find('#Status').html()
                 status = status.replace('Status: ','').toLowerCase()
+                // Used to remove the space for 'In progress' otherwise that won't work
+                status = status.replace(' ','')
                 if (name.includes(devicesearch) && sub.includes(subsearch) && ((plantfilter == "disabled") || (plantfilter == plant)) && ((statusfilter == "disabled") || (statusfilter == status))) {
                     $(row).attr("hidden",false)
                 } else {
