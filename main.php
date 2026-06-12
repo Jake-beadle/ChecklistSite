@@ -75,7 +75,7 @@ $checkresult = mysqli_query($conn, $checkquery);
             <option value="immingham">Immingham</option>
         </select><br><br>
         <label for="sub">Sub-location:</label>
-        <input list="sublocations" id="sub" name="sub">
+        <input list="sublocations" id="sub" name="sub" placeholder="Enter sub-location" required>
         <datalist id='sublocations' name='sublocations'>
             <option>Blast Furnaces</option>
             <option>BOS Plant</option>
