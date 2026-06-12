@@ -100,8 +100,8 @@ $checkresult = mysqli_query($conn, $checkquery);
     </form>
     <p id="result"></p>
     <?php
-    if ($_SESSION['perms'] == 'Admin') { // If someone is an admin, they are given access to the user table
-        echo "<p><em>This account is an admin - you can access user details (and edit them) <a href='/users.php'>here</a></em></p>";
+    if ($_SESSION['perms'] == 'Admin') { // If someone is an admin, they are given access to the user table as well as the deleted entries page
+        echo "<p><em>This account is an admin - you can access user details (and edit them) <a href='/users.php'>here</a> and see deleted entries on <a href='/deleted.php'>this page</a></em></p></em></p>";
     }
     // Shows the user's name and permissions while using the site
     echo "Username: <span id='username'>".$_SESSION['user']."</span>, permission level: ".$_SESSION['perms']."<br><br>";
