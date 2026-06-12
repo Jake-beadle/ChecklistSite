@@ -82,7 +82,7 @@ option::checkmark {
     justify-self: center;
 }
 
-#login, #checklist, #checklistuser, #checklisttable, #usertable {
+#login, #checklist, #checklistuser, #checklisttable, #usertable, #filters {
     border: 2px solid rgb(100, 100, 100);
     background-color: #2f3b44;
     padding: 8px 16px;
@@ -93,7 +93,11 @@ option::checkmark {
     accent-color: #ec7f22;
 }
 
-#deviceselect {
+#deviceselect, #subfilter {
     font-size: 20px;
     margin-bottom: 20px;
+}
+
+#filters {
+    display: inline-block;
 }

@@ -108,7 +108,41 @@ $checkresult = mysqli_query($conn, $checkquery);
     ?>
     <!-- Logs the user out, sending them back to the login page -->
     <a href="./methods/accountlogout.php"><button>Log out of your account</button></a>
-    <h2>Select a device from the drop-down list below (or search its name) to get its details:</h2>
+    <h2>Select a device using the search/filters below to get its details:</h2>
+    <div id="filters" name="filters">
+    <!-- Lets the user filter by the plant that the device is located at -->
+    <label for="plantfilter">Filter by plant:</label>
+    <select id="plantfilter" name="plantfilter">
+        <option value="disabled">Disabled (all plants)</option>
+        <option value="scunthorpe">Scunthorpe</option>
+        <option value="teesside">Teesside</option>
+        <option value="skinningrove">Skinningrove</option>
+        <option value="immingham">Immingham</option>
+    </select>
+    <!-- Lets the user filter by the testing status of the device -->
+    <label for="statusfilter">Filter by status:</label>
+    <select id="statusfilter" name="statusfilter">
+        <option value="disabled">Disabled</option>
+        <option value='received'>Received</option>
+        <option value='inprogress'>In progress</option>
+        <option value='passed'>Passed</option>
+        <option value='failed'>Failed</option>
+    </select><br><br>
+    <!-- Lets the user filter by the sublocation that the device is located at -->
+    <label for="subfilter">Filter by sub-location:</label>
+    <input list="sublocations" id="subfilter" name="subfilter"><br>
+    <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar
+    Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once)
+    Searching a PC's name (or part of it) will make it appear in the table -->
+    <label for="deviceselect">Select/search for device:</label>
+    <input list="devices" id="deviceselect" name="deviceselect">
+    <datalist id='devices' name='devices'>  
+        <?php 
+        while ($deviceoption = mysqli_fetch_assoc($deviceresult)) {
+            echo "<option value=".$deviceoption["PCname"].">".$deviceoption["PCname"]."</option>";
+        }
+        ?>
+    </datalist><br>
     <!-- Lets the user sort the returned rows by date based on their selection -->
     <label for="datesort">Sort by date created/edited:</label>
     <select class="urlchange" id="datesort" name="datesort">
@@ -140,40 +174,8 @@ $checkresult = mysqli_query($conn, $checkquery);
             }
         ?>   
     </select>
-    <button id="nextpage">Next page</button><br><br>
-    <!-- Gives the user two methods of selecting devices: a drop-down list or a search bar
-    Choosing a PC from the list makes it appear in the table (allows multiple to be shown at once)
-    Searching a PC's name (or part of it) will make it appear in the table -->
-    <label for="deviceselect">Select/search for device:</label>
-    <input list="devices" id="deviceselect" name="deviceselect">
-    <datalist id='devices' name='devices'>  
-        <?php 
-        while ($deviceoption = mysqli_fetch_assoc($deviceresult)) {
-            echo "<option value=".$deviceoption["PCname"].">".$deviceoption["PCname"]."</option>";
-        }
-        ?>
-    </datalist><br>
-    <!-- Lets the user filter by the plant that the device is located at -->
-    <label for="plantfilter">Filter by plant:</label>
-    <select id="plantfilter" name="plantfilter">
-        <option value="disabled">Disabled (all plants)</option>
-        <option value="scunthorpe">Scunthorpe</option>
-        <option value="teesside">Teesside</option>
-        <option value="skinningrove">Skinningrove</option>
-        <option value="immingham">Immingham</option>
-    </select>
-    <!-- Lets the user filter by the testing status of the device -->
-    <label for="statusfilter">Filter by status:</label>
-    <select id="statusfilter" name="statusfilter">
-        <option value="disabled">Disabled</option>
-        <option value='received'>Received</option>
-        <option value='inprogress'>In progress</option>
-        <option value='passed'>Passed</option>
-        <option value='failed'>Failed</option>
-    </select><br><br>
-    <!-- Lets the user filter by the sublocation that the device is located at -->
-    <label for="subfilter">Filter by sub-location:</label>
-    <input list="sublocations" id="subfilter" name="subfilter"><br><br>
+    <button id="nextpage">Next page</button><br>
+    </div><br><br>
     <!-- Table that contains checklists and information for each PC.
     Initially shows all information for that page, but can change what
     entries are shown by using the search/dropdown above -->
